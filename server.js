@@ -1,12 +1,14 @@
 const express = require('express');
+const projectRouter = require("./data/helpers/projectModel.js")
 const server = express();
-const projectRouter = require('./projectsRouter')
-const actionRouter = require('./actionsRouter')
 
 server.use(express.json());
 server.use(logger);
 server.use('/projects', projectRouter);
-server.use('/actions', actionRouter);
+
+server.get('/', (req, res) => {
+    res.send(`<h2>This is gonna be exciting.</h2>`)
+  });
 
 function logger(req, res, next) {
     console.log(`[${new Date().toString()}] ${req.method} to ${req.url} from ${req.get('Origin',)}`)
