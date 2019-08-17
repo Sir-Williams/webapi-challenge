@@ -20,7 +20,9 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", confirmProjectId, (req, res) => {
-    projectDb.get(req.body.id)
+    const id = req.params.id
+
+    projectDb.get(id)
         .then(project => {
             res.status(200).json(project)
         })
@@ -34,18 +36,30 @@ router.get("/:id/actions", confirmProjectId, (req, res) => {
     const id = req.params.id
 
         projectDb.getProjectActions(id)
-        .then(projects => {
-            res.status(200).json(projects)
-        })
-        .catch(err => {
-            res.status(500).json({ error: 'Error getting action with this ID'})
-        })
+            .then(projects => {
+                res.status(200).json(projects)
+            })
+            .catch(err => {
+                res.status(500).json({ error: 'Error getting action with this ID'})
+            })
         res.status(401)
        
 });
 
 router.post("/", (req, res) => {
-
+    const { name, description } = req.body
+    if(!{name} || !{description}){
+        res.status(401).json({ message: 'Must insert name and description' })
+    } else {
+        projectDb.insert(req.body)
+            .then(project => {
+                res.status(201).json(project)
+            })
+            .catch(err => {
+                res.status(500).json({ error: 'Error posting project' })
+            })
+    }
+    
 });
 
 router.post("/:id/actions", (req, res) => {
