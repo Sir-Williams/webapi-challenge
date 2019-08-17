@@ -62,8 +62,15 @@ router.post("/", (req, res) => {
     
 });
 
-router.post("/:id/actions", (req, res) => {
-    
+router.post("/:id/actions", confirmProjectId, confirmProject, (req, res) => {
+    actionDb.insert(req.body)
+        .then(action => {
+            res.status(200).json(action);
+        })
+        .catch(err => {
+            res.status(500).json({error: 'Error posting action.'})
+        })
+
 });
 
 router.delete("/:id", (req, res) => {
@@ -99,6 +106,18 @@ function confirmProjectId(req, res, next) {
         .catch(err => {
             res.status(500).json({ error: 'Error in finding ID.'})
         })
+};
+
+function confirmProject(req, res, next) {
+    const body = req.body
+    const projectId = req.body.project_id;
+    const notes = req.body.notes;
+
+    if ( !body || !projectId || !notes) {
+        res.status(400).json({ message: 'Must instert body, description and notes'})
+    } else {
+        next();
+    }
 };
 
 module.exports = router;
