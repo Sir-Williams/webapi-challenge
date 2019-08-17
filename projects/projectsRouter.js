@@ -19,7 +19,7 @@ router.get("/", (req, res) => {
         res.status(401)
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", confirmProjectId, (req, res) => {
     projectDb.get(req.body.id)
         .then(project => {
             res.status(200).json(project)
@@ -56,5 +56,24 @@ router.put("/:id", (req, res) => {
 router.put("/:project_id/actions/:id", (req, res) => {
     
 });
+
+//middleware
+
+function confirmProjectId(req, res, next) {
+    const { id } = req.params;
+
+    projectDb.get(id)
+        .then(project => {
+            if(project){
+                req.project = project;
+                next();
+            } else {
+                res.status(400).json({ message: "Could not find project with this ID."})
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error in finding ID.'})
+        })
+};
 
 module.exports = router;
