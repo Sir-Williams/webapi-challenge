@@ -1,16 +1,32 @@
 const express = require('express');
 
 const projectDb = require('../data/helpers/projectModel.js');
-const actionDb = require('../data/helpers/actionModel.js')
+const actionDb = require('../data/helpers/actionModel.js');
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    
+    const name  = req.body.name
+    const description = req.body.description
+
+        projectDb.get()
+            .then(project => {
+                res.status(200).json(project)
+            })
+            .catch(err => {
+                res.status(500).json({ error: 'Error getting projects'})
+            })
+        res.status(401)
 });
 
 router.get("/:id", (req, res) => {
-    
+    projectDb.get(req.body.id)
+        .then(project => {
+            res.status(200).json(project)
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error getting post with this id'})
+        })
 });
 
 router.get("/:id/actions", (req, res) => {

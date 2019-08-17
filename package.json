@@ -30,6 +30,6 @@
     "sqlite3": "^4.0.8"
   },
   "devDependencies": {
-    "knex-cleaner": "^1.1.4"
+    "knex-cleaner": "^1.3.0"
   }
 }
