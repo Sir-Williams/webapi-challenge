@@ -27,10 +27,21 @@ router.get("/:id", confirmProjectId, (req, res) => {
         .catch(err => {
             res.status(500).json({ error: 'Error getting post with this id'})
         })
+        res.status(401)
 });
 
-router.get("/:id/actions", (req, res) => {
-    
+router.get("/:id/actions", confirmProjectId, (req, res) => {
+    const id = req.params.id
+
+        projectDb.getProjectActions(id)
+        .then(projects => {
+            res.status(200).json(projects)
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Error getting action with this ID'})
+        })
+        res.status(401)
+       
 });
 
 router.post("/", (req, res) => {
